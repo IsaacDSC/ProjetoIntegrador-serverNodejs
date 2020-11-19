@@ -1,0 +1,151 @@
+<style>
+    canvas {
+        display: block;
+        float: left;
+        transform: scale(1);
+        transform-origin: 0% 0% 0px;
+    }
+
+    .camera {
+        display: block;
+        margin-left: 10px;
+        padding: 0px;
+        width: 640px;
+        height: 325px;
+    }
+</style>
+<div class="content-wrapper">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center">Area de Monitoramento Técnico de Segurança</h1>
+                <hr>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col">
+                        <video autoplay id="cam" width="854" height="480" muted></video>
+                    </div>
+                    <div class="col"></div>
+
+                    {{!-- <div>                                                
+                        <iframe frameborder="0" height="720" width="560"></iframe>
+                    </div> --}}
+
+                    {{!--                     <div style="margin-bottom: 10px;">
+                        <img src="http://10.0.0.149/" width="650px">
+                    </div> --}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{{!-- src="http://admin:adminarroba10.0.0.131/tmpfs/autojpeg" --}}
+{{!-- src="http://10.0.0.169:8080/video" --}}
+{{!-- http://10.0.0.187:8888/video --}}
+
+<script src="/assets/lib/face-api/face-api.min.js"></script>
+<script>
+    const cam = document.getElementById('cam')
+    const startVideo = () => {
+        navigator.mediaDevices.enumerateDevices()
+            .then((devices) => {
+                console.log(devices)
+                if (Array.isArray(devices)) {
+                    devices.forEach(element => {
+                        if (element.kind == 'videoinput') {
+                            console.log(element)
+                            navigator.getUserMedia({
+                                video: {
+                                    deviceId: element.deviceId
+                                }
+                            }, stream => cam.srcObject = stream,
+                                error => console.log(error)
+                            )
+                        }
+                    })
+                }
+            })
+    }
+
+
+    const loadLabels = () => {
+        const labels = ['Ruan sem EPI']
+        return Promise.all(labels.map(async label => {
+            const descriptions = []
+            for (let i = 1; i <= 5; i++) {
+                const img = await faceapi.fetchImage(`/assets/lib/face-api/labels/${label}/${i}.jpg`)
+                const detections = await faceapi
+                    .detectSingleFace(img)
+                    .withFaceLandmarks()
+                    .withFaceDescriptor()
+                descriptions.push(detections.descriptor)
+            }
+            return new faceapi.LabeledFaceDescriptors(label, descriptions)
+        }))
+    }
+
+    Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri('/assets/lib/face-api/models'),
+        faceapi.nets.faceLandmark68Net.loadFromUri('/assets/lib/face-api/models'),
+        faceapi.nets.faceRecognitionNet.loadFromUri('/assets/lib/face-api/models'),
+        faceapi.nets.faceExpressionNet.loadFromUri('/assets/lib/face-api/models'),
+        faceapi.nets.ageGenderNet.loadFromUri('/assets/lib/face-api/models'),
+        faceapi.nets.ssdMobilenetv1.loadFromUri('/assets/lib/face-api/models'),
+    ]).then(startVideo)
+
+
+    cam.addEventListener('play', async () => {
+        const canvas = faceapi.createCanvasFromMedia(cam)
+        const canvasSize = {
+            width: cam.width,
+            height: cam.height
+        }
+        const labels = await loadLabels()
+        faceapi.matchDimensions(canvas, canvasSize)
+        document.body.appendChild(canvas)
+        setInterval(async () => {
+            const detections = await faceapi
+                .detectAllFaces(
+                    cam,
+                    new faceapi.TinyFaceDetectorOptions()
+                )
+                .withFaceLandmarks()
+                .withFaceExpressions()
+                .withAgeAndGender()
+                .withFaceDescriptors()
+            const resizedDetections = faceapi.resizeResults(detections, canvasSize)
+            const faceMatcher = new faceapi.FaceMatcher(labels, 0.6)
+            const results = resizedDetections.map(d =>
+                faceMatcher.findBestMatch(d.descriptor)
+            )
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+            faceapi.draw.drawDetections(canvas, resizedDetections)
+            faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+            faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
+            resizedDetections.forEach(detection => {
+                const { age, gender, genderProbability } = detection
+                new faceapi.draw.DrawTextField([
+                    `${parseInt(age, 10)} years`,
+                    `${gender} (${parseInt(genderProbability * 100, 10)})`
+                ], detection.detection.box.topRight).draw(canvas)
+            })
+            results.forEach((result, index) => {
+                const box = resizedDetections[index].detection.box
+                const { label, distance } = result
+                new faceapi.draw.DrawTextField([
+                    `${label} (${parseInt(distance * 100, 10)})`
+                ], box.bottomRight).draw(canvas)
+            })
+        }, 100)
+    })
+
+
+
+</script>
+{{!-- <script src="/assets/js/index.js"></script> --}}
+
+
+
+
+

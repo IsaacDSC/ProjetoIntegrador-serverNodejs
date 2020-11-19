@@ -1,0 +1,33 @@
+<div class="content-wrapper mt-5">
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h2>Colaboradores</h2>
+                <hr>
+                <div class="message mt-2">
+                    {{>_msg}}
+                </div>
+                <div class="row">
+                    {{#each collaborators}}
+                    <div class="col-4">
+                        <div class="borda" style="border: solid 1px rgb(196, 196, 196); border-radius:15px;">
+                            <p class="ml-2 mt-2"><strong>Empresa: </strong>{{company}}</p>
+                            <p class="ml-2 mt-2"><strong>Nome: </strong> {{name}}</p>
+                            <p class="ml-2 mt-2"><strong>E-mail: </strong>{{email}}</p>
+                            <p class="ml-2 mt-2"><strong>Telefone: </strong>{{telephone}}</p>
+                            <p class="ml-2 mt-2"><strong>Telefone Emergêncial: </strong>{{telephone_emergency}}</p>
+                            <p class="ml-2 mt-2"><strong>Cartão: </strong>{{card}}</p>
+                        </div>
+                        <form action="delete" method="post">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <input type="hidden" name="folder" value="{{name}}">
+                            <button class="btn btn-danger col-12 mt-2">Deletar</button>
+                        </form>
+                    </div>
+                    {{/each}}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

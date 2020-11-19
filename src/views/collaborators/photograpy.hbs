@@ -1,0 +1,52 @@
+<div class="content-wrapper mt-5">
+    {{>_photograpy}}
+    {{>_msg}}
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h2>Carregue a Imagem do colaborador</h2>
+                <hr>
+                <form action="/folder" method="POST">
+                    <div class="row mt-3">
+                        <label for="folderCollaborator">Selecione a Pasta com o nome do colaborador</label>
+                        <select name="folderCollaborator" id="folderCollaborator" class="form-control">
+                            <option value="">Selecione</option>
+                            {{#each paths}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select>
+                    </div>                   
+                    <div class="row mt-3">
+                        <div class="col"></div>
+                        <div class="col-6">
+                            <button class="btn btn-primary col-12">Enviar</button>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2>Carregue a Imagem do colaborador</h2>
+                <hr>
+                <form action="/upload" method="POST" enctype="multipart/form-data">
+                    <div class="row mt-3">
+                        <label for="img">Carregue as 5 fotos do colaborador aqui</label>
+                        <input type="file" class="form-control" name="img" id="img" multiple="multiple">
+                    </div>                   
+                    <div class="row mt-3">
+                        <div class="col"></div>
+                        <div class="col-6">
+                            <button class="btn btn-primary col-12">Enviar</button>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

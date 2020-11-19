@@ -1,0 +1,102 @@
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0 text-dark">Dashboard</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                                <li class="breadcrumb-item active">Register</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+        </div>
+
+        {{>_photograpy}}
+
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center">Registre agora seu Colaborador</h1>
+                <hr>
+                {{>_msg}}
+                <form action="/register" method="post">
+                    <div class="row">
+                        {{#if dataCollaborations}}
+                        {{#each dataCollaborations}}
+                        <div class="col-6">
+                            <label for="">Nome</label>
+                            <input type="text" name="name" class="form-control"
+                                placeholder="Digite o nome do colaborador" value="{{name}}">
+                            <label for="">E-mail</label>
+                            <input type="text" name="email" class="form-control"
+                                placeholder="Digite o email do colaborador" value="{{email}}">
+                            <label for="">Empresa</label>
+                            <input type="text" name="company" class="form-control"
+                                placeholder="Digite o a Empresa do colaborador" value="{{company}}">
+                        </div>
+                        <div class="col-6">
+                            <label for="">Telefone</label>
+                            <input type="text" name="telephone" class="form-control"
+                                placeholder="Digite o telefone do colaborador" value="{{telephone}}">
+                            <label for="">Telefone Emergência</label>
+                            <input type="text" name="telephoneEmergency" class="form-control"
+                                placeholder="Digite o telefone de emergência do colaborador"
+                                value="{{telephoneEmergency}}">
+                            <label for="">Selecione os Cartões disponíveis</label>
+                            <select name="card" id="card" class="form-control">
+                                <option value="">Selecione</option>
+                                {{#each cards}}
+                                <option value="{{card}}">{{card}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        {{/each}}                    
+                        {{else}}
+                        <div class="col-6">
+                            <label for="">Nome</label>
+                            <input type="text" name="name" class="form-control"
+                                placeholder="Digite o nome do colaborador">
+                            <label for="">E-mail</label>
+                            <input type="text" name="email" class="form-control"
+                                placeholder="Digite o email do colaborador">
+                            <label for="">Empresa</label>
+                            <input type="text" name="company" class="form-control"
+                                placeholder="Digite o a Empresa do colaborador">
+                        </div>
+                        <div class="col-6">
+                            <label for="">Telefone</label>
+                            <input type="text" name="telephone" class="form-control"
+                                placeholder="Digite o telefone do colaborador">
+                            <label for="">Telefone Emergência</label>
+                            <input type="text" name="telephoneEmergency" class="form-control"
+                                placeholder="Digite o telefone de emergência do colaborador"
+                            >
+                            <label for="">Selecione os Cartões disponíveis</label>
+                            <select name="card" id="card" class="form-control">
+                                <option value="">Selecione</option>
+                                {{#each cards}}
+                                <option value="{{card}}">{{card}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        {{/if}}
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col"></div>
+                        <div class="col-8">
+                            <button class="btn btn-primary col-12">Enviar</button>
+                            {{!-- <button class="btn btn-primary col-12" type="button" class="btn btn-primary" data-toggle="modal" data-target="#photograpy">Enviar</button> --}}
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

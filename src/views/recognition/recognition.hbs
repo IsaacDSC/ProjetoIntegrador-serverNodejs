@@ -1,0 +1,57 @@
+<style>
+    canvas {
+        display: block;
+        float: left;
+        transform: scale(1);
+        transform-origin: 0% 0% 0px;
+    }
+
+    .camera {
+        display: block;
+        margin-left: 10px;
+        padding: 0px;
+        width: 640px;
+        height: 325px;
+    }
+</style>
+<div class="content-wrapper">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center">Area de Monitoramento Técnico de Segurança</h1>
+                <hr>
+                <div class="row">
+                    {{!-- <video autoplay id="cam" muted>
+            </video> --}}
+                    <div>
+                        <canvas class="camera" id="videoCanvas" width="640" height="325">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script type="text/javascript" src="/js/jsmpeg.js"></script>
+        <script type="text/javascript">
+            const canvas = document.getElementById('videoCanvas');
+
+            var ws = new WebSocket("ws://localhost:9999")
+
+            var player = new jsmpeg(client, {
+                canvas: canvas,
+                autoplay: true,
+                audio: true,
+                loop: true
+            });
+
+            console.log(player)
+        </script>
+
+
+    </div>
+</div>
+
+
+<script src="/assets/lib/face-api/dist/face-api.min.js"></script>
+<script src="/assets/js/index.js"></script>
