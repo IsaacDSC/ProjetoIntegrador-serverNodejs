@@ -1,7 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/recognition', (req, res) => {
+const { auth } = require('../helpers/auth')
+
+router.get('/recognition', auth, (req, res) => {
     res.render('recognition/recognition3')
 })
 

@@ -1,77 +1,63 @@
+//import node_modules 
 const express = require('express')
 const router = express.Router()
+    //import security acess in session
 const { auth } = require('../helpers/auth')
+
+//imports database
 const Collaborators = require('../database/models/Collaborators')
 const db = require('../database/indexSQL')
-let comportamentoEstranho = []
-const sendRFID = require('../helpers/sendRFID')
-const alert = require('../helpers/alertAnonimus')
 const Cards = require('../database/models/Cards')
 
+//create array for behavior anonimus
+let comportamentoEstranho = []
 
-router.get('/', auth, (req, res) => {
-    let SQL = `SELECT * FROM rfids LIMIT 5;`
+//import functions receiving params
+const sendRFID = require('../helpers/sendRFID')
+const alert = require('../helpers/alertAnonimus')
+const registerCards = require('../helpers/registerCards')
+const CheckAnonimusRFID = require('../helpers/CheckAnonimusRFID')
+
+
+router.get('/', auth, (req, res) => { // route home ind page or service of the aplication
+    let SQL = `SELECT * FROM rfids ORDER BY updatedAt DESC LIMIT 5;`
     let total_register = `SELECT COUNT(id) AS total FROM collaborators;`
-    db.connection.query(SQL, (err, result) => {
-        db.connection.query(total_register, (err, register) => {
+    db.connection.query(SQL, (err, result) => { // receive query db RFIDS search last data in date
+        db.connection.query(total_register, (err, register) => { // receive query in db COLLABORATORNS count total the id in db
+            if (err) {
+                console.log(err)
+            }
             res.render('index/index', { Datas: result, anonimus: comportamentoEstranho[0], register: register[0] })
         })
     })
 })
 
 router.post('/sensors', async(req, res) => {
-    const { id, name, type, value } = req.body
-    let SQL = `SELECT company, name FROM collaborators where card= '${value}';`
+    const { id, name, type, value } = req.body //datas received in ESP8266 - RFID
+    let SQL = `SELECT company, name FROM collaborators where card= '${value}';` // select datas this collaborators where cards proceeding RFID=card
 
-    ///cadastrando cartoes direto
-    Cards.findOne({ where: { card: value } }).then((card) => {
-            if (!card) {
-                Cards.create({
-                    card: value
-                }).then(() => {
-                    console.log('cadastrando com sucesso!')
-                })
-            } else {
-                card.card = value
-                card.save().then(() => {
-                    console.log('cadastrado com sucesso!')
-                }).catch((err) => {
-                    console.log(err)
-                })
-            }
-        })
-        ///fim cadastro cartoes
+    ///register cards ever db CARDS
+    registerCards.registerCards(value)
+        ///end register card db
 
-    db.connection.query(SQL, async(err, result) => {
-        //console.log(comportamentoEstranho)
-        //if (comportamentoEstranho[0].error < 3) {
-        if (result == null || result == undefined || result == '') {
-            if (comportamentoEstranho == '') {
-                comportamentoEstranho.push({ error: 1 })
-                res.redirect('/')
-            }
-            if (comportamentoEstranho[0].erro > 1 && comportamentoEstranho[0].erro < 3) {
-                comportamentoEstranho[0].error += +1
-                console.log(comportamentoEstranho)
-                res.redirect('/')
-            }
-            if (comportamentoEstranho[0].error > 3) {
-                comportamentoEstranho[0].error += +1
-                console.log(comportamentoEstranho)
-                alert.alertAnonimus()
-            }
-            console.log('Comportamento Estranho')
-            let anonimus = [{ company: 'anonimus', name: 'anonimus' }]
-            sendRFID.sendRFID(id, anonimus, name, type, value, 'off')
+    //Checking if datas card from collaborators is exist or not exist
+    db.connection.query(SQL, async(err, resultdb) => { //consult company and name to value card
+        if (err) {
+            console.log('result in card in CARDS \n' + resultdb)
+        } else {
+            console.log('consult company and name to value card is a SUCCESS!!!')
+            console.log('this result in query:  ' + resultdb)
+            resultdb.forEach(element => {
+                //checking if is a anonimus or collaborators registered
+                let ArrResult = [element.company, element.name]
+                CheckAnonimusRFID.ChecksAnonimus(ArrResult, resultdb, id, name, type, value)
+                console.log(element.company)
+                console.log(element.name)
+            })
         }
-        if (result != '') {
-            sendRFID.sendRFID(id, result, name, type, value, 'on')
-        }
-
-
     })
 })
 
 
-
+//export instance router in route aplication service
 module.exports = router

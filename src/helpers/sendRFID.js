@@ -1,10 +1,12 @@
 const RFID = require('../database/models/RFID')
-const api = require('../api.js')
-async function sendRFID(id, resultado, name, type, value, RELEstatus) {
+
+
+async function sendRFID(id, ArrResult, name, type, value, RELEstatus) {
+    console.log('\n\n'+RELEstatus)
     const rfid = await RFID.create({
         id_controler: id,
-        company: resultado[0].company,
-        collaborator: resultado[0].name,
+        company: ArrResult[0],
+        collaborator: ArrResult[1],
         sector: name,
         type: type,
         value: value
@@ -17,7 +19,10 @@ async function sendRFID(id, resultado, name, type, value, RELEstatus) {
 
         await api.get(`/?f=${RELEstatus}`, config)
             .then(() => console.log('Enviado com sucesso!'))
-    }).catch((err) => { console.log(err) })
+    }).catch((err) => { 
+        console.log('erro ao enviar AXIOS')
+        console.log(err)
+     })
 }
 
 exports.sendRFID = sendRFID
