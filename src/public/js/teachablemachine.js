@@ -1,54 +1,45 @@
 let STATUS = []
 
 async function submitURI() {
-    var telaRecognition = document.querySelector('#telaRecognition')//define display page recognition
+    var telaRecognition = document.querySelector('#telaRecognition') //define display page recognition
     var URL = document.querySelector('#URI_value').value //geting value input frontend at modal reconition, get URI
-    localStorage.setItem('URL', URL)// submit URL in LocalStorage
-    URL.click()
-    var dataURL = localStorage.getItem('URL')//geting data localStorage in URL
+    localStorage.setItem('URL', URL) // submit URL in LocalStorage
+    document.querySelector('#closeURL').click()
+    var dataURL = localStorage.getItem('URL') //geting data localStorage in URL
     console.log(dataURL)
     telaRecognition.innerHTML = `Endereço: ${dataURL}`
 }
 window.addEventListener("load", function(event) {
-    var dataURL = localStorage.getItem('URL')//geting data localStorage in URL
+    var dataURL = localStorage.getItem('URL') //geting data localStorage in URL
     console.log(dataURL)
     telaRecognition.innerHTML = `Endereço: ${dataURL}`
-  });
+});
 
 
 //function for send array status
-  async function sendSTATUS(){
-    STATUS.pop()
-    await STATUS.push({value: prediction[i].className})
-    console.log('enviando status class 2')
-    console.log(STATUS)
-    /* if(STATUS){
-        STATUS.pop()
-        await STATUS.push(prediction[i].className)
-        console.log('enviando status class 2')
-        console.log(STATUS)
-    }else{
-        await STATUS.push(prediction[i].className)
-        console.log('enviando status class 2')
-        console.log(STATUS)
-    } */
+async function checkingStatus() {
+    alert(STATUS[0].className + '\n' + STATUS[0].probability)
+    if (STATUS[0].className == 'COM EPI' && STATUS[0].probability == true) {
+        sendStatusESP8266('alerta')
+    }
+    return STATUS[0].value
 }
 
 //function for sendSTATUS ON or OFF to machine
-async function sendStatusESP8266(status){
-    var myHeaders = new Headers();
+async function sendStatusESP8266(status) {
     var myInit = {
         method: 'GET',
-        headers: myHeaders,
         mode: 'cors',
-        cache: 'default'    
+        cache: 'default'
     };
-    fetch(`http://10.0.0.164/?f=${status}`, myInit)
-        .then(function (response) {
+    await fetch(`http://10.0.0.164/?f=${status}`, myInit)
+        .then(function(response) {
             console.log('SEM EPI, ENVIADO AO SERVER')
             return response.blob();
+        }).catch((err) => {
+            console.log(err)
         })
-    //alertAnonimus.alertAnonimus()
+        //alertAnonimus.alertAnonimus()
     console.log('SEM EPI, ENVIANDO AO SERVER...')
 }
 
@@ -98,12 +89,15 @@ async function predict() {
     const prediction = await model.predict(webcam.canvas);
     for (let i = 0; i < maxPredictions; i++) {
         //console.log(prediction[i].className + '\n' + prediction[i].probability)
-        if (prediction[i].className == 'Class 2' && prediction[i].probability > 0.60) {
-            //console.log(prediction[i].probability)
-            sendSTATUS()
-        }
+        //console.log(prediction[i].probability)
+        const ClasseName = prediction[i].className
+        const Probability = prediction[i].probability
+        STATUS.pop()
+        STATUS.push({ className: ClasseName, probability: Probability > 0.70 })
+
         const classPrediction = prediction[i].className + ": " + prediction[i].probability.toFixed(2);
         labelContainer.childNodes[i].innerHTML = classPrediction;
     }
 }
 
+setInterval(() => { checkingStatus() }, 15000)
