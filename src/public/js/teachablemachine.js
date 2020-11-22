@@ -19,7 +19,7 @@ window.addEventListener("load", function(event) {
 //function for send array status
 async function checkingStatus() {
     alert(STATUS[0].className + '\n' + STATUS[0].probability)
-    if (STATUS[0].className == 'COM EPI' && STATUS[0].probability == true) {
+    if (STATUS[0].className == 'SEM EPI' && STATUS[0].probability == true) {
         sendStatusESP8266('alerta')
     }
     return STATUS[0].value
