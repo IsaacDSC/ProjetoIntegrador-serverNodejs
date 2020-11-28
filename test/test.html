@@ -1,0 +1,724 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="Access-Control-Allow-Headers" content="Origin, X-Requested-With, Content-Type, Accept">
+    <meta http-equiv="Access-Control-Allow-Methods" content="GET,POST,PUT,DELETE,OPTIONS">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>Automação-2019073</title>
+    <!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> -->
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #000000d3;
+            color: #df2020;
+            font-size: 16px;
+        }
+        
+        h1 {
+            color: #84C7E5;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        
+        h2 {
+            font-size: 18px;
+            color: #95b0bd;
+        }
+        
+        h2 strong {
+            color: #96b3c0;
+        }
+        
+        label {
+            color: rgba(204, 204, 204, 0.507);
+        }
+        
+        hr {
+            margin-top: 40px;
+            background-color: black;
+            height: 1px;
+            width: 90%;
+        }
+        
+        section.main {
+            display: flex
+        }
+        
+        #menu,
+        section.main {
+            flex-direction: column
+        }
+        
+        input {
+            margin-top: 5px;
+            border: none;
+            height: 30px;
+            border-radius: 2px;
+        }
+        
+        #menu {
+            display: flex;
+            flex-wrap: nowrap;
+            width: 100%;
+            height: 377px;
+            background: #363636;
+            padding: 8px;
+            border-radius: 5px;
+            margin-top: -10px;
+        }
+        
+        #content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: stretch
+        }
+        
+        figure {
+            padding: 0;
+            margin: 0;
+            -webkit-margin-before: 0;
+            margin-block-start: 0;
+            -webkit-margin-after: 0;
+            margin-block-end: 0;
+            -webkit-margin-start: 0;
+            margin-inline-start: 0;
+            -webkit-margin-end: 0;
+            margin-inline-end: 0
+        }
+        
+        figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 8px
+        }
+        
+        @media (min-width: 800px) and (orientation:landscape) {
+            #content {
+                display: flex;
+                flex-wrap: nowrap;
+                align-items: stretch
+            }
+            figure img {
+                display: block;
+                max-width: 100%;
+                max-height: calc(100vh - 40px);
+                width: auto;
+                height: auto
+            }
+            figure {
+                padding: 0;
+                margin: 0;
+                -webkit-margin-before: 0;
+                margin-block-start: 0;
+                -webkit-margin-after: 0;
+                margin-block-end: 0;
+                -webkit-margin-start: 0;
+                margin-inline-start: 0;
+                -webkit-margin-end: 0;
+                margin-inline-end: 0
+            }
+        }
+        
+        section#buttons {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between
+        }
+        
+        #nav-toggle {
+            cursor: pointer;
+            display: block
+        }
+        
+        #nav-toggle-cb {
+            outline: 0;
+            opacity: 0;
+            width: 0;
+            height: 0
+        }
+        
+        #nav-toggle-cb:checked+#menu {
+            display: none
+        }
+        
+        .input-group {
+            display: flex;
+            flex-wrap: nowrap;
+            line-height: 22px;
+            margin: 5px 0
+        }
+        
+        .input-group>label {
+            display: inline-block;
+            padding-right: 10px;
+            min-width: 47%
+        }
+        
+        .input-group input,
+        .input-group select {
+            flex-grow: 1
+        }
+        
+        .range-max,
+        .range-min {
+            display: inline-block;
+            padding: 0 5px
+        }
+        
+        button {
+            display: block;
+            margin: 5px;
+            padding: 0 12px;
+            border: 0;
+            line-height: 28px;
+            cursor: pointer;
+            color: #fff;
+            background: #ff3034;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: 0
+        }
+        
+        button:hover {
+            background: #ff494d
+        }
+        
+        button:active {
+            background: #f21c21
+        }
+        
+        button.disabled {
+            cursor: default;
+            background: #a0a0a0
+        }
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 22px;
+            background: #363636;
+            cursor: pointer;
+            margin: 0
+        }
+        
+        input[type=range]:focus {
+            outline: 0
+        }
+        
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 2px;
+            cursor: pointer;
+            background: #EFEFEF;
+            border-radius: 0;
+            border: 0 solid #EFEFEF
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            border: 1px solid rgba(0, 0, 30, 0);
+            height: 22px;
+            width: 22px;
+            border-radius: 50px;
+            background: #ff3034;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -11.5px
+        }
+        
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #EFEFEF
+        }
+        
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 2px;
+            cursor: pointer;
+            background: #EFEFEF;
+            border-radius: 0;
+            border: 0 solid #EFEFEF
+        }
+        
+        input[type=range]::-moz-range-thumb {
+            border: 1px solid rgba(0, 0, 30, 0);
+            height: 22px;
+            width: 22px;
+            border-radius: 50px;
+            background: #ff3034;
+            cursor: pointer
+        }
+        
+        input[type=range]::-ms-track {
+            width: 100%;
+            height: 2px;
+            cursor: pointer;
+            background: 0 0;
+            border-color: transparent;
+            color: transparent
+        }
+        
+        input[type=range]::-ms-fill-lower {
+            background: #EFEFEF;
+            border: 0 solid #EFEFEF;
+            border-radius: 0
+        }
+        
+        input[type=range]::-ms-fill-upper {
+            background: #EFEFEF;
+            border: 0 solid #EFEFEF;
+            border-radius: 0
+        }
+        
+        input[type=range]::-ms-thumb {
+            border: 1px solid rgba(0, 0, 30, 0);
+            height: 22px;
+            width: 22px;
+            border-radius: 50px;
+            background: #ff3034;
+            cursor: pointer;
+            height: 2px
+        }
+        
+        input[type=range]:focus::-ms-fill-lower {
+            background: #EFEFEF
+        }
+        
+        input[type=range]:focus::-ms-fill-upper {
+            background: #363636
+        }
+        
+        .switch {
+            display: block;
+            position: relative;
+            line-height: 22px;
+            font-size: 16px;
+            height: 22px
+        }
+        
+        .switch input {
+            outline: 0;
+            opacity: 0;
+            width: 0;
+            height: 0
+        }
+        
+        .slider {
+            width: 50px;
+            height: 22px;
+            border-radius: 22px;
+            cursor: pointer;
+            background-color: grey
+        }
+        
+        .slider,
+        .slider:before {
+            display: inline-block;
+            transition: .4s
+        }
+        
+        .slider:before {
+            position: relative;
+            content: "";
+            border-radius: 50%;
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            top: 3px;
+            background-color: #fff
+        }
+        
+        input:checked+.slider {
+            background-color: #ff3034
+        }
+        
+        input:checked+.slider:before {
+            -webkit-transform: translateX(26px);
+            transform: translateX(26px)
+        }
+        
+        select {
+            border: 1px solid #363636;
+            font-size: 14px;
+            height: 22px;
+            outline: 0;
+            border-radius: 5px
+        }
+        
+        .image-container {
+            position: relative;
+            min-width: 160px
+        }
+        
+        .close {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background: #ff3034;
+            width: 16px;
+            height: 16px;
+            border-radius: 100px;
+            color: red;
+            text-align: center;
+            line-height: 18px;
+            cursor: pointer
+        }
+        
+        .hidden {
+            display: none
+        }
+        
+        .container {
+            margin-top: 35px;
+            width: 97vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center
+        }
+        
+        .card {
+            width: 90%;
+            height: 700px;
+            background: #fff;
+            border-radius: 5px;
+            margin-top: 100px;
+        }
+        
+        #titulo {
+            position: absolute;
+            top: 75px;
+            margin-left: 40%;
+        }
+        
+        img {
+            margin-left: 10%;
+        }
+    </style>
+    <script src="https:\/\/ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script src="https:\/\/cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https:\/\/cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <img src="data:image/png;base64,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"
+                    width="200" class="ml-5" alt="">
+                <div id="titulo">
+                    <h1 class="text-center mt-5">Automação Industrial - 2019073</h1>
+                    <h2 class="ml-5 "><strong>Alunos: </strong> IsaacDSC, Alexssander, Ruan, Fernanda</h2>
+                    <h2 class="ml-5 "><strong>Projeto: </strong>Proteção em Primeiro lugar</h2>
+                    <h2 class="ml-5 "><strong>Professor: </strong> Julio</h2>
+                </div>
+                <section class="main">
+                    <figure>
+                        <div id="stream-container" class="image-container hidden">
+                            <div class="close" id="close-stream" style="display:none">×</div>
+                            <img id="stream" src="" style="display:none" crossorigin="anonymous">
+                            <canvas id="canvas" width="0" height="0"></canvas>
+                        </div>
+                    </figure>
+                    <hr>
+                    <div class="row">
+                        <div class="col-9">
+                            <div id="logo">
+                                <label for="nav-toggle-cb" id="nav-toggle" style="color: black;">&#9776;&nbsp;&nbsp;Configurações</label>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <section id="buttons">
+                                <button class="btn btn-danger col-12" id="restart" onclick="try{fetch(document.location.origin+'/control?restart');}catch(e){}">Restart</button>
+                                <button id="get-still" style="display:none">Get Still</button>
+                                <button id="toggle-stream" style="display:none">
+                            </section>
+                        </div>
+                    </div>
+                    <div id="containerTow">
+                    <div class="row">
+                        <div id="content" class="mt-3">
+                            <div id="sidebar">
+                                <input type="checkbox" id="nav-toggle-cb">
+                                <nav id="menu">
+                                    <label for="modelPath" class="text-center">Link do Treinamento</label>
+                                    <input type="text" id="modelPath" value="" class="form-control"
+                                        placeholder="Digite o link do treinamento">
+
+                                    <label for="btnModel"></label>
+                                    <button class="btn btn-danger" type="button" id="btnModel"
+                                        onclick="LoadModel();">Iniciar Reconhecimento</button>
+
+                                <div class="input-group mt-4" id="flash-group">
+                                    <label for="flash">Flash</label>
+                                    <div class="range-min">0</div>
+                                    <input type="range" id="flash" min="0" max="255" value="0" class="default-action">
+                                    <div class="range-max">255</div>
+                                </div>
+                                <div class="input-group" id="framesize-group">
+                                    <label for="framesize">Resolução</label>
+                                    <select id="framesize" class="default-action">
+                                            <option value="10">UXGA(1600x1200)</option>
+                                            <option value="9">SXGA(1280x1024)</option>
+                                            <option value="8">XGA(1024x768)</option>
+                                            <option value="7">SVGA(800x600)</option>
+                                            <option value="6">VGA(640x480)</option>
+                                            <option value="5" selected="selected">CIF(400x296)</option>
+                                            <option value="4">QVGA(320x240)</option>
+                                            <option value="3">HQVGA(240x176)</option>
+                                            <option value="0">QQVGA(160x120)</option>
+                                        </select>
+                                </div>
+                                <div class="input-group" id="quality-group">
+                                    <label for="quality">Qualidade</label>
+                                    <div class="range-min">10</div>
+                                    <input type="range" id="quality" min="10" max="63" value="10" class="default-action">
+                                    <div class="range-max">63</div>
+                                </div>
+                                <div class="input-group" id="brightness-group">
+                                    <label for="brightness">Brilho</label>
+                                    <div class="range-min">-2</div>
+                                    <input type="range" id="brightness" min="-2" max="2" value="0" class="default-action">
+                                    <div class="range-max">2</div>
+                                </div>
+                                <div class="input-group" id="contrast-group">
+                                    <label for="contrast">Contraste</label>
+                                    <div class="range-min">-2</div>
+                                    <input type="range" id="contrast" min="-2" max="2" value="0" class="default-action">
+                                    <div class="range-max">2</div>
+                                </div>
+                                <div class="input-group" id="hmirror-group">
+                                    <label for="hmirror">H-Mirror</label>
+                                    <div class="switch">
+                                        <input id="hmirror" type="checkbox" class="default-action" checked="checked">
+                                        <label class="slider" for="hmirror"></label>
+                                    </div>
+                                </div>
+                                <div class="input-group" id="vflip-group">
+                                    <label for="vflip">V-Flip</label>
+                                    <div class="switch">
+                                        <input id="vflip" type="checkbox" class="default-action" checked="checked">
+                                        <label class="slider" for="vflip"></label>
+                                    </div>
+                                </div>
+                                </nav>
+                        </div>
+                    </div>
+                    </section>
+                    <br>
+                    <div class="row">
+                        <div id="result" style="color:red">
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function(event) {
+                var baseHost = document.location.origin
+                var streamUrl = baseHost + ':81'
+                const hide = el => {
+                    el.classList.add('hidden')
+                }
+                const show = el => {
+                    el.classList.remove('hidden')
+                }
+                const disable = el => {
+                    el.classList.add('disabled')
+                    el.disabled = true
+                }
+                const enable = el => {
+                    el.classList.remove('disabled')
+                    el.disabled = false
+                }
+                const updateValue = (el, value, updateRemote) => {
+                    updateRemote = updateRemote == null ? true : updateRemote
+                    let initialValue
+                    if (el.type === 'checkbox') {
+                        initialValue = el.checked
+                        value = !!value
+                        el.checked = value
+                    } else {
+                        initialValue = el.value
+                        el.value = value
+                    }
+                    if (updateRemote && initialValue !== value) {
+                        updateConfig(el);
+                    }
+                }
+
+                function updateConfig(el) {
+                    let value
+                    switch (el.type) {
+                        case 'checkbox':
+                            value = el.checked ? 1 : 0
+                            break
+                        case 'range':
+                        case 'select-one':
+                            value = el.value
+                            break
+                        case 'button':
+                        case 'submit':
+                            value = '1'
+                            break
+                        default:
+                            return
+                    }
+                    const query = `${baseHost}/control?var=${el.id}&val=${value}`
+                    fetch(query)
+                        .then(response => {
+                            console.log(`request to ${query} finished, status: ${response.status}`)
+                        })
+                }
+                document
+                    .querySelectorAll('.close')
+                    .forEach(el => {
+                        el.onclick = () => {
+                            hide(el.parentNode)
+                        }
+                    })
+                    // read initial values
+                fetch(`${baseHost}/status`)
+                    .then(function(response) {
+                        return response.json()
+                    })
+                    .then(function(state) {
+                        document
+                            .querySelectorAll('.default-action')
+                            .forEach(el => {
+                                updateValue(el, state[el.id], false)
+                            })
+                    })
+                const view = document.getElementById('stream')
+                const viewContainer = document.getElementById('stream-container')
+                const stillButton = document.getElementById('get-still')
+                const streamButton = document.getElementById('toggle-stream')
+                const closeButton = document.getElementById('close-stream')
+                const stopStream = () => {
+                    //window.stop();
+                    view.src = "";
+                    streamButton.innerHTML = 'Start Stream'
+                }
+                const startStream = () => {
+                        view.src = `${streamUrl}/stream`
+                        show(viewContainer)
+                        streamButton.innerHTML = 'Stop Stream'
+                    }
+                    // Attach actions to buttons
+                stillButton.onclick = () => {
+                    stopStream()
+                    try {
+                        view.src = `${baseHost}/capture?_cb=${Date.now()}`
+                    } catch (e) {
+                        view.src = `${baseHost}/capture?_cb=${Date.now()}`
+                    }
+                    show(viewContainer)
+                }
+                closeButton.onclick = () => {
+                    stopStream()
+                    hide(viewContainer)
+                }
+                streamButton.onclick = () => {
+                        const streamEnabled = streamButton.innerHTML === 'Stop Stream'
+                        if (streamEnabled) {
+                            stopStream()
+                        } else {
+                            startStream()
+                        }
+                    }
+                    // Attach default on change action
+                document
+                    .querySelectorAll('.default-action')
+                    .forEach(el => {
+                        el.onchange = () => updateConfig(el)
+                    })
+            })
+        </script>
+
+        <script>
+            var getStill = document.getElementById('get-still');
+            var ShowImage = document.getElementById('stream');
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            var modelPath = document.getElementById('modelPath');
+            var result = document.getElementById('result');
+            let Model;
+
+            async function LoadModel() {
+                if (modelPath.value == "") {
+                    result.innerHTML = "Please input model path.";
+                    return;
+                }
+
+                result.innerHTML = "Please wait for loading model.";
+
+                const URL = modelPath.value;
+                const modelURL = URL + "model.json";
+                const metadataURL = URL + "metadata.json";
+
+                Model = await tmImage.load(modelURL, metadataURL);
+                maxPredictions = Model.getTotalClasses();
+                result.innerHTML = "";
+
+                getStill.style.display = "block";
+                getStill.click();
+            }
+
+            async function predict() {
+                var data = "";
+                var maxClassName = "";
+                var maxProbability = "";
+
+                canvas.setAttribute("width", ShowImage.width);
+                canvas.setAttribute("height", ShowImage.height);
+                context.drawImage(ShowImage, 0, 0, ShowImage.width, ShowImage.height);
+
+                const prediction = await Model.predict(canvas);
+                if (maxPredictions > 0) {
+                    for (let i = 0; i < maxPredictions; i++) {
+                        if (i == 0) {
+                            maxClassName = prediction[i].className;
+                            maxProbability = prediction[i].probability;
+                        } else {
+                            if (prediction[i].probability > maxProbability) {
+                                maxClassName = prediction[i].className;
+                                maxProbability = prediction[i].probability;
+                            }
+                        }
+                        data += prediction[i].className + "," + prediction[i].probability.toFixed(2) + "<br>";
+                    }
+                    result.innerHTML = data;
+                    result.innerHTML += "<br>Result: " + maxClassName + "," + maxProbability;
+
+                    $.ajax({
+                        url: document.location.origin + '/control?serial=' + maxClassName + ";" + maxProbability + ';stop',
+                        async: false
+                    });
+                } else
+                    result.innerHTML = "Unrecognizable";
+
+                getStill.click();
+            }
+
+            ShowImage.onload = function(event) {
+                if (Model) {
+                    try {
+                        document.createEvent("TouchEvent");
+                        setTimeout(function() {
+                            predict();
+                        }, 250);
+                    } catch (e) {
+                        predict();
+                    }
+                }
+            }
+        </script>
+</body>
+
+</html>

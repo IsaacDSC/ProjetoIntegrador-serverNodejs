@@ -18,8 +18,10 @@ window.addEventListener("load", function(event) {
 
 //function for send array status
 async function checkingStatus() {
-    alert(STATUS[0].className + '\n' + STATUS[0].probability)
-    if (STATUS[0].className == 'SEM EPI' && STATUS[0].probability == true) {
+    //alert(STATUS[0].className + '\n' + STATUS[0].probability)
+    console.log(`status: ${STATUS[0].className}, probabilidade: ${STATUS[0].probability}`)
+    if (STATUS[0].className == "COM EPI" && STATUS[0].probability) {
+        alert(STATUS[0].className + ':' + STATUS[0].probability)
         sendStatusESP8266('alerta')
     }
     return STATUS[0].value
@@ -27,6 +29,7 @@ async function checkingStatus() {
 
 //function for sendSTATUS ON or OFF to machine
 async function sendStatusESP8266(status) {
+    console.log('SEM EPI, ENVIANDO AO SERVER...')
     var myInit = {
         method: 'GET',
         mode: 'cors',
@@ -40,7 +43,6 @@ async function sendStatusESP8266(status) {
             console.log(err)
         })
         //alertAnonimus.alertAnonimus()
-    console.log('SEM EPI, ENVIANDO AO SERVER...')
 }
 
 
@@ -93,11 +95,16 @@ async function predict() {
         const ClasseName = prediction[i].className
         const Probability = prediction[i].probability
         STATUS.pop()
-        STATUS.push({ className: ClasseName, probability: Probability > 0.70 })
+        STATUS.push({ className: ClasseName, probability: Probability })
 
         const classPrediction = prediction[i].className + ": " + prediction[i].probability.toFixed(2);
         labelContainer.childNodes[i].innerHTML = classPrediction;
     }
 }
 
-setInterval(() => { checkingStatus() }, 15000)
+setInterval(() => {
+    checkingStatus()
+    STATUS.forEach(Element => {
+        console.log(Element)
+    })
+}, 15000)
