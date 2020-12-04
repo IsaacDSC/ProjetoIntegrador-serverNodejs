@@ -8,9 +8,6 @@ const flash = require('express-flash')
 const cors = require('cors')
 const passport = require('passport')
 require('./config/authenticated')(passport)
-const connetedCAM = require('./helpers/connetedCAM')
-const WebSocket = require('ws');
-const WS_PORT = 8888;
 
 const routes = require('./routes/routes')
 const login = require('./routes/login')
@@ -19,23 +16,6 @@ const collaborators = require('./routes/collaborators')
 const recongnition = require('./routes/recognition')
 
 
-const wsServer = new WebSocket.Server({ port: WS_PORT }, () => console.log(`WS Server is listening at ${WS_PORT}`));
-
-let connectedClients = [];
-wsServer.on('connection', (ws, req) => {
-    console.log('Connected');
-    connectedClients.push(ws);
-
-    ws.on('message', data => {
-        connectedClients.forEach((ws, i) => {
-            if (ws.readyState === ws.OPEN) {
-                ws.send(data);
-            } else {
-                connectedClients.splice(i, 1);
-            }
-        })
-    });
-});
 
 app.use((req, res, next) => {
     //Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
