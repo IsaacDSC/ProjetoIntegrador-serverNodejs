@@ -1,4 +1,4 @@
-//import node_modules 
+//import node_modules
 const express = require('express')
 const router = express.Router()
     //import security acess in session
@@ -19,7 +19,11 @@ const registerCards = require('../helpers/registerCards')
 const CheckAnonimusRFID = require('../helpers/CheckAnonimusRFID')
 
 
-router.get('/', auth, (req, res) => { // route home ind page or service of the aplication
+router.get('/', (req, res)=>{
+    res.json({message: 'hello word'})
+})
+
+router.get('/asd', auth, (req, res) => { // route home ind page or service of the aplication
     let SQL = `SELECT * FROM rfids ORDER BY updatedAt DESC LIMIT 5;`
     let total_register = `SELECT COUNT(id) AS total FROM collaborators;`
     db.connection.query(SQL, (err, result) => { // receive query db RFIDS search last data in date
