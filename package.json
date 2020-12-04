@@ -8,7 +8,7 @@
         "server": "pm2 start ./src/server.js",
         "monit": "pm2 start ./src/server.js",
         "stop": "pm2 stop ./src/server.js",
-        "start": "nodemon ./src/server.js",
+        "start": "node ./src/server.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
