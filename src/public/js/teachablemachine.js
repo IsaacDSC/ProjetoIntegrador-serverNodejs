@@ -20,7 +20,7 @@ window.addEventListener("load", function(event) {
 async function checkingStatus() {
     //alert(STATUS[0].className + '\n' + STATUS[0].probability)
     console.log(`status: ${STATUS[0].className}, probabilidade: ${STATUS[0].probability}`)
-    if (STATUS[0].className == "COM EPI" && STATUS[0].probability) {
+    if (STATUS[0].className == "SEM EPI" && STATUS[0].probability) {
         alert(STATUS[0].className + ':' + STATUS[0].probability)
         sendStatusESP8266('alerta')
     }
