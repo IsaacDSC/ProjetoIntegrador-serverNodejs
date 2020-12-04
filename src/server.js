@@ -102,7 +102,7 @@ app.use(collaborators)
 app.use(recongnition)
 
 const port = 3000
-app.listen(port, () => {
+app.listen(port || process.env.PORT, () => {
     console.log(`http://IP:${port}`)
     console.log('Break server CTRL + C')
 })
