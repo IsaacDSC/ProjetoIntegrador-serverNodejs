@@ -60,5 +60,21 @@ router.post('/sensors', async(req, res) => {
 })
 
 
+router.post('/alert', (req, res) => {
+    const { id, name, type, value } = req.body
+    let SQL = `UPDATE rfids SET alerta = SENSOR WHERE (id = '${value}');`
+
+    db.connection.query(SQL, (err, result) => {
+        if (err) {
+            console.log(err + '\n' + result)
+        } else {
+            if (result == '' || result == undefined || result == null) {
+                let SQL_insertStatusAlert = ``
+            }
+        }
+    })
+})
+
+
 //export instance router in route aplication service
 module.exports = router

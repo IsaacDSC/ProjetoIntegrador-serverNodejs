@@ -24,6 +24,10 @@ const RFID = db.define('RFID', {
     value: {
         type: db.Sequelize.STRING,
         allowNull: false
+    },
+    alerta: {
+        type: db.Sequelize.INTERGER,
+        allowNull: false
     }
 })
 

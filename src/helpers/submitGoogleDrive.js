@@ -1,9 +1,17 @@
 const gdiu = require('google-drive-image-upload')
 
-gdiu.authAccount().then(async(auth, img)=>{
-    //console.log(auth)
-     const {url} =  await gdiu.uploadImage(auth, img)
-     console.log(url)
-}).catch((err)=>{
-    console.log(err)
-})
+
+function sendGoogleDrive(dir) {
+    gdiu.authAccount().then(async(auth, dir) => {
+        //console.log(auth)
+        const { url } = await gdiu.uploadImage(auth, dir)
+        console.log(url)
+        return url
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+
+
+exports.sendGoogleDrive = sendGoogleDrive
