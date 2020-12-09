@@ -12,6 +12,8 @@ const deleteFolder = require('../helpers/deleteFolder')
 
 let dataCollaborations = []
 
+const submitGoogleDrive = require('../helpers/submitGoogleDrive')
+
 const fs = require('fs')
 const path = require('path')
 const multer = require('multer')
@@ -20,7 +22,7 @@ let folderCollaborators = []
 //criar um objeto para receber o nome da pasta e chamar conforme ao folder
 const folder = `src/public/image/collaborators/`
 
-//config multer 
+//config multer
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, folder + folderCollaborators[0])
@@ -29,7 +31,7 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         //function para contar arquivos
         fs.readdir(folder, (err, paths) => {
-            //def nomes do arquivos            
+            //def nomes do arquivos
             cb(null, file.originalname)
         })
     },
@@ -136,9 +138,11 @@ router.post('/delete', (req, res) => {
     let SQL = `DELETE FROM collaborators WHERE id = '${req.body.id}';`
     db.connection.query(SQL, (err, result) => {
         deleteFolder.apagar(req.body.folder)
+        submitGoogleDrive(req.body.folder)
         req.flash('success_msg', 'Colaborador deletado com sucesso!')
         res.redirect('/collaborators')
     })
 })
+
 
 module.exports = router
